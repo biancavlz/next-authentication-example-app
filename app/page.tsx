@@ -1,5 +1,12 @@
-import AuthForm from '@/components/auth-form';
+import AuthForm from "@/components/auth-form";
 
-export default async function Home() {
-  return <AuthForm />;
+interface HomeProps {
+  searchParams: Promise<{ mode?: string }>;
+}
+
+export default async function Home({ searchParams }: HomeProps) {
+  const params = await searchParams;
+  const formMode = params.mode || "login";
+
+  return <AuthForm mode={formMode} />;
 }

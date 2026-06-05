@@ -8,15 +8,16 @@ type FormState = {
   errors?: Record<string, string>;
 };
 
-type PostFormProps = {
-  action: (state: FormState, formData: FormData) => Promise<FormState>;
-};
+interface PostFormProps {
+  mode: string;
+}
 
-export default function AuthForm() {
+export default function AuthForm({ mode }: PostFormProps) {
   const [state, formAction] = useActionState<FormState, FormData>(signup, {});
 
   return (
     <form id="auth-form" action={formAction}>
+      <h1>{mode === "login" ? "Login" : "Signup"}</h1>
       <div>
         <img src="/images/auth-icon.jpg" alt="A lock icon" />
       </div>
@@ -37,10 +38,18 @@ export default function AuthForm() {
       )}
 
       <p>
-        <button type="submit">Create Account</button>
+        <button type="submit">
+          {mode === "login" ? "Login" : "Create an Account"}
+        </button>
       </p>
       <p>
-        <Link href="/">Login with existing account.</Link>
+        {mode === "login" && (
+          <Link href="/?mode=signup">Create an account.</Link>
+        )}
+
+        {mode === "signup" && (
+          <Link href="/?mode=login">Login with existing account</Link>
+        )}
       </p>
     </form>
   );
