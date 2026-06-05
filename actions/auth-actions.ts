@@ -1,8 +1,8 @@
 "use server";
 
 import { createAuthSession } from "@/lib/auth";
-import { hashUserPassword } from "@/lib/hash";
-import { createUser } from "@/lib/user";
+import { hashUserPassword, verifyPassword } from "@/lib/hash";
+import { createUser, getUserByEmail } from "@/lib/user";
 import { redirect } from "next/navigation";
 
 type FormState = {
@@ -44,4 +44,33 @@ export async function signup(
       return { errors: { email: "Email already exists" } };
     throw error;
   }
+}
+
+export async function login(prevState, formData) {
+  const email = String(formData.get("email") ?? "");
+  const password = String(formData.get("password") ?? "");
+
+  const existingUser = getUserByEmail(email);
+
+  if (!existingUser) {
+    return {
+      errors: {
+        email: "Could not authenticate user, please check the credentials",
+      },
+    };
+  }
+
+  const isValidPassword = verifyPassword(existingUser.password, password);
+
+  if (!isValidPassword) {
+    return {
+      errors: {
+        password: "Could not authenticate user, please check the credentials",
+      },
+    };
+  }
+
+  // Create session cookie
+  await createAuthSession(String(existingUser.id));
+  redirect("/training");
 }
