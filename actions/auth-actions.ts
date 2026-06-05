@@ -46,7 +46,10 @@ export async function signup(
   }
 }
 
-export async function login(prevState, formData) {
+export async function login(
+  prevState: FormState,
+  formData: FormData,
+): Promise<FormState> {
   const email = String(formData.get("email") ?? "");
   const password = String(formData.get("password") ?? "");
 
@@ -73,4 +76,12 @@ export async function login(prevState, formData) {
   // Create session cookie
   await createAuthSession(String(existingUser.id));
   redirect("/training");
+}
+
+export async function auth(mode, prevState, formData) {
+  if (mode === "login") {
+    return login(prevState, formData);
+  }
+
+  return signup(prevState, formData);
 }

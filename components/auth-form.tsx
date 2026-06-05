@@ -1,11 +1,11 @@
 "use client";
 
-import { signup } from "@/actions/auth-actions";
+import { auth } from "@/actions/auth-actions";
 import Link from "next/link";
 import { useActionState } from "react";
 
 type FormState = {
-  errors?: Record<string, string>;
+  errors?: Record<string, string | undefined>;
 };
 
 interface PostFormProps {
@@ -13,7 +13,10 @@ interface PostFormProps {
 }
 
 export default function AuthForm({ mode }: PostFormProps) {
-  const [state, formAction] = useActionState<FormState, FormData>(signup, {});
+  const [state, formAction] = useActionState<FormState, FormData>(
+    auth.bind(null, mode),
+    {},
+  );
 
   return (
     <form id="auth-form" action={formAction}>
