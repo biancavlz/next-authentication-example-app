@@ -1,3 +1,4 @@
+import { logout } from "@/actions/auth-actions";
 import "../globals.css";
 
 export const metadata = {
@@ -11,13 +12,14 @@ interface RootLayoutProps {
 
 export default function AuthRootLayout({ children }: RootLayoutProps) {
   return (
-    <html lang="en">
-      <body>
-        <header id="auth-header">
-          <p>Welcome back!</p>
-        </header>
-        {children}
-      </body>
-    </html>
+    <>
+      <header id="auth-header">
+        <p>Welcome back!</p>
+        <form action={logout}>
+          <button>Logout</button>
+        </form>
+      </header>
+      {children}
+    </>
   );
 }
