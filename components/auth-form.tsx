@@ -1,6 +1,7 @@
 "use client";
 
 import { auth } from "@/actions/auth-actions";
+import Image from "next/image";
 import Link from "next/link";
 import { useActionState } from "react";
 
@@ -22,7 +23,13 @@ export default function AuthForm({ mode }: PostFormProps) {
     <form id="auth-form" action={formAction}>
       <h1>{mode === "login" ? "Login" : "Signup"}</h1>
       <div>
-        <img src="/images/auth-icon.jpg" alt="A lock icon" />
+        <Image
+          src={"/images/auth-icon.jpg"}
+          alt="A lock icon"
+          width={50}
+          height={50}
+          priority
+        />
       </div>
       <p>
         <label htmlFor="email">Email</label>
